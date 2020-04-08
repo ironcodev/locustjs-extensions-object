@@ -1,0 +1,20 @@
+{
+  "name": "locustjs-extensions-object",
+  "version": "1.0.0",
+  "description": "This library contains extension methods for Object",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ironcodev/locustjs-extensions-object.git"
+  },
+  "keywords": [ "locustjs", "extensions" ],
+  "author": "Iron Code",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ironcodev/locustjs-extensions-object/issues"
+  },
+  "homepage": "https://github.com/ironcodev/locustjs-extensions-object#readme"
+}
