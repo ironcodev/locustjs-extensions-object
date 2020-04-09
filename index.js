@@ -1,5 +1,28 @@
 import { isObject } from 'locust-base'
 
+const isSubClassOf = (child, parent) => child.prototype instanceof parent || child === parent;
+//source: https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
+const deepAssign = function (target, ...sources) {
+	if (!sources.length) return target;
+
+	const source = sources.shift();
+
+	if (isObject(target) && isObject(source)) {
+		for (const key in source) {
+			if (isObject(source[key])) {
+				if (!target[key])
+					Object.assign(target, { [key]: {} });
+				
+				deepAssign(target[key], source[key]);
+			} else {
+				Object.assign(target, { [key]: source[key] });
+			}
+		}
+	}
+
+	return Object.deepAssign(target, ...sources);
+}
+
 function configureObjectExtensions(options) {
 	const _options = Object.assign({
 		replaceExisting: true
@@ -7,7 +30,7 @@ function configureObjectExtensions(options) {
 
 	if (typeof Object.prototype.isSubClassOf == 'undefined' || _options.replaceExisting) {
 		Object.prototype.isSubClassOf = function (parent) {
-			return this.prototype instanceof parent || this === parent;
+			return isSubClassOf(this, parent);
 		}
 	}
 	
@@ -17,28 +40,12 @@ function configureObjectExtensions(options) {
 		}
 	}
 	
-	//source: https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
-	Object.deepAssign = function (target, ...sources) {
-		if (!sources.length) return target;
-
-		const source = sources.shift();
-
-		if (isObject(target) && isObject(source)) {
-			for (const key in source) {
-				if (isObject(source[key])) {
-					if (!target[key])
-						Object.assign(target, { [key]: {} });
-					
-					Object.deepAssign(target[key], source[key]);
-				} else {
-					Object.assign(target, { [key]: source[key] });
-				}
-			}
-		}
-
-		return Object.deepAssign(target, ...sources);
-	}
+	Object.deepAssign = deepAssign;
 }
 
 export default configureObjectExtensions()
 
+export {
+	isSubClassOf,
+	deepAssign
+}
