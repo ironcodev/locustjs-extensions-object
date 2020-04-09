@@ -10,11 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/ironcodev/locustjs-extensions-object.git"
   },
-  "keywords": [ "locustjs", "extensions" ],
+  "keywords": [
+    "locustjs",
+    "extensions"
+  ],
   "author": "Iron Code",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ironcodev/locustjs-extensions-object/issues"
   },
-  "homepage": "https://github.com/ironcodev/locustjs-extensions-object#readme"
+  "homepage": "https://github.com/ironcodev/locustjs-extensions-object#readme",
+  "dependencies": {
+    "locustjs-base": "^1.0.1"
+  }
 }
