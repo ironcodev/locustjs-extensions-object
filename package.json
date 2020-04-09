@@ -1,6 +1,6 @@
 {
   "name": "locustjs-extensions-object",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "This library contains extension methods for Object",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/ironcodev/locustjs-extensions-object#readme",
   "dependencies": {
-    "locustjs-base": "^1.0.1",
+    "locustjs-base": "^1.0.2",
     "locustjs-extensions-options": "^1.0.1"
   }
 }
