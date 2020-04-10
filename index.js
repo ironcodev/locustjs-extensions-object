@@ -1,5 +1,5 @@
-import { isObject } from 'locust-base'
-import { configureOptions, shouldExend } from 'locustjs-extensions-options'
+import { isObject, forEach } from 'locust-base'
+import { configureOptions, shouldExtend } from 'locustjs-extensions-options'
 
 const isSubClassOf = (child, parent) => child.prototype instanceof parent || child === parent;
 
@@ -26,21 +26,29 @@ const deepAssign = function (target, ...sources) {
 }
 
 function configureObjectExtensions(options) {
-	const _options = configureOptions(options)
+	const _options = configureOptions(options);
 
-	if (typeof Object.prototype.isSubClassOf == 'undefined' || shouldExend('isSubClassOf', _options)) {
+	if (typeof Object.prototype.isSubClassOf == 'undefined' || shouldExtend('isSubClassOf', _options)) {
 		Object.prototype.isSubClassOf = function (parent) {
 			return isSubClassOf(this, parent);
 		}
 	}
 	
-	if (typeof Object.prototype.toJson == 'undefined' || shouldExend('toJson', _options)) {
+	if (typeof Object.prototype.toJson == 'undefined' || shouldExtend('toJson', _options)) {
 		Object.prototype.toJson = function (replacer = null, space = null) {
 			return JSON.stringify(this, relacer, space)
 		}
 	}
 	
-	Object.deepAssign = deepAssign;
+	if (typeof Object.deepAssign == 'undefined' || shouldExtend('deepAssign', _options)) {
+		Object.deepAssign = deepAssign;
+	}
+	
+	if (typeof Object.prototype.forEach == 'undefined' || shouldExtend('forEach', _options)) {
+		Object.prototype.forEach = function (callback) {
+			return forEach(this, callback);
+		}
+	}
 }
 
 export default configureObjectExtensions
