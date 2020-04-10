@@ -1,6 +1,6 @@
 {
   "name": "locustjs-extensions-object",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "This library contains extension methods for Object",
   "main": "index.js",
   "scripts": {

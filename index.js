@@ -1,4 +1,4 @@
-import { isObject, forEach } from 'locust-base'
+import { isObject, forEach } from 'locustjs-base'
 import { configureOptions, shouldExtend } from 'locustjs-extensions-options'
 
 const isSubClassOf = (child, parent) => child.prototype instanceof parent || child === parent;
