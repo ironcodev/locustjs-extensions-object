@@ -1,6 +1,6 @@
 {
   "name": "locustjs-extensions-object",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "This library contains extension methods for Object",
   "main": "index.cjs.js",
   "module": "index.esm.js",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/ironcodev/locustjs-extensions-object#readme",
   "dependencies": {
-    "locustjs-base": "^1.0.4",
+    "locustjs-base": "^1.0.5",
     "locustjs-extensions-options": "^1.0.5"
   }
 }

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deepAssign = exports.isSubClassOf = exports.default = void 0;
+exports.deepAssign = exports.default = void 0;
 
 var _locustjsBase = require("locustjs-base");
 
@@ -11,15 +11,7 @@ var _locustjsExtensionsOptions = require("locustjs-extensions-options");
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return !!right[Symbol.hasInstance](left); } else { return left instanceof right; } }
-
-var isSubClassOf = function isSubClassOf(child, parent) {
-  return _instanceof(child.prototype, parent) || child === parent;
-}; //source: https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
-
-
-exports.isSubClassOf = isSubClassOf;
-
+//source: https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
 var deepAssign = function deepAssign(target) {
   for (var _len = arguments.length, sources = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     sources[_key - 1] = arguments[_key];
@@ -49,7 +41,7 @@ function configureObjectExtensions(options) {
 
   if (typeof Object.prototype.isSubClassOf == 'undefined' || (0, _locustjsExtensionsOptions.shouldExtend)('isSubClassOf', _options)) {
     Object.prototype.isSubClassOf = function (parent) {
-      return isSubClassOf(this, parent);
+      return (0, _locustjsBase.isSubClassOf)(this, parent);
     };
   }
 

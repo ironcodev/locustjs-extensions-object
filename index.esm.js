@@ -1,7 +1,5 @@
-import { isObject, forEach } from 'locustjs-base'
+import { isObject, forEach, isSubClassOf } from 'locustjs-base'
 import { configureOptions, shouldExtend } from 'locustjs-extensions-options'
-
-const isSubClassOf = (child, parent) => child.prototype instanceof parent || child === parent;
 
 //source: https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
 const deepAssign = function (target, ...sources) {
@@ -54,6 +52,5 @@ function configureObjectExtensions(options) {
 export default configureObjectExtensions
 
 export {
-	isSubClassOf,
 	deepAssign
 }
