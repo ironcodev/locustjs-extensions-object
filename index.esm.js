@@ -23,24 +23,24 @@ const deepAssign = function (target, ...sources) {
 	return Object.deepAssign(target, ...sources);
 }
 
-const objectifyProps = function(object) {
+const objectifyProps = function(obj) {
 	let result;
 	
-	if (isSomeObject(object)) {
-		if (isArray(object)) {
+	if (isSomeObject(obj)) {
+		if (isArray(obj)) {
 			result = [];
 			
-			for (let item of object) {
+			for (let item of obj) {
 				result.push(objectifyProps(item));
 			}
 		} else {
 			result = {}
 			
-			for (let key of Object.keys(object)) {
+			for (let key of Object.keys(obj)) {
 				let dotIndex = key.indexOf('.');
 				
 				if (dotIndex < 0) {
-					result[key] = object[key];
+					result[key] = obj[key];
 				} else {
 					let prevIndex = 0;
 					let prevObj = result;
@@ -57,12 +57,37 @@ const objectifyProps = function(object) {
 						dotIndex = key.indexOf('.', dotIndex + 1);
 					}
 					
-					prevObj[key.substr(prevIndex)] = object[key];
+					prevObj[key.substr(prevIndex)] = obj[key];
 				}
 			}
 		}
 	} else {
-		result = object;
+		result = obj;
+	}
+	
+	return result;
+}
+
+const toArray = function (obj) {
+	let result;
+	
+	if (isArray(obj)) {
+		let arr = [];
+		
+		for (let item of obj) {
+			arr.push(toArray(item));
+		}
+		
+		result = [arr];
+	} else if (isObject(obj)) {
+		result = [];
+		
+		for (let key of Object.keys(obj)) {
+			result.push(key);
+			result.push(toArray(obj[key]))
+		}
+	} else {
+		result = obj;
 	}
 	
 	return result;
@@ -92,11 +117,24 @@ function configureObjectExtensions(options) {
 			return forEach(this, callback);
 		}
 	}
+	
+	if (typeof Object.prototype.objectifyProps == 'undefined' || shouldExtend('objectifyProps', _options)) {
+		Object.prototype.objectifyProps = function () {
+			return objectifyProps(this)
+		}
+	}
+	
+	if (typeof Object.prototype.toArray == 'undefined' || shouldExtend('toArray', _options)) {
+		Object.prototype.toArray = function () {
+			return toArray(this)
+		}
+	}
 }
 
 export default configureObjectExtensions
 
 export {
 	deepAssign,
-	objectifyProps
+	objectifyProps,
+	toArray
 }

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.objectifyProps = exports.deepAssign = exports.default = void 0;
+exports.toArray = exports.objectifyProps = exports.deepAssign = exports.default = void 0;
 
 var _locustjsBase = require("locustjs-base");
 
@@ -42,14 +42,14 @@ var deepAssign = function deepAssign(target) {
 
 exports.deepAssign = deepAssign;
 
-var objectifyProps = function objectifyProps(object) {
+var objectifyProps = function objectifyProps(obj) {
   var result;
 
-  if ((0, _locustjsBase.isSomeObject)(object)) {
-    if ((0, _locustjsBase.isArray)(object)) {
+  if ((0, _locustjsBase.isSomeObject)(obj)) {
+    if ((0, _locustjsBase.isArray)(obj)) {
       result = [];
 
-      var _iterator = _createForOfIteratorHelper(object),
+      var _iterator = _createForOfIteratorHelper(obj),
           _step;
 
       try {
@@ -65,12 +65,12 @@ var objectifyProps = function objectifyProps(object) {
     } else {
       result = {};
 
-      for (var _i = 0, _Object$keys = Object.keys(object); _i < _Object$keys.length; _i++) {
+      for (var _i = 0, _Object$keys = Object.keys(obj); _i < _Object$keys.length; _i++) {
         var key = _Object$keys[_i];
         var dotIndex = key.indexOf('.');
 
         if (dotIndex < 0) {
-          result[key] = object[key];
+          result[key] = obj[key];
         } else {
           var prevIndex = 0;
           var prevObj = result;
@@ -87,18 +87,56 @@ var objectifyProps = function objectifyProps(object) {
             dotIndex = key.indexOf('.', dotIndex + 1);
           }
 
-          prevObj[key.substr(prevIndex)] = object[key];
+          prevObj[key.substr(prevIndex)] = obj[key];
         }
       }
     }
   } else {
-    result = object;
+    result = obj;
   }
 
   return result;
 };
 
 exports.objectifyProps = objectifyProps;
+
+var toArray = function toArray(obj) {
+  var result;
+
+  if ((0, _locustjsBase.isArray)(obj)) {
+    var arr = [];
+
+    var _iterator2 = _createForOfIteratorHelper(obj),
+        _step2;
+
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var item = _step2.value;
+        arr.push(toArray(item));
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+
+    result = [arr];
+  } else if ((0, _locustjsBase.isObject)(obj)) {
+    result = [];
+
+    for (var _i2 = 0, _Object$keys2 = Object.keys(obj); _i2 < _Object$keys2.length; _i2++) {
+      var key = _Object$keys2[_i2];
+      result.push(key);
+      result.push(toArray(obj[key]));
+    }
+  } else {
+    result = obj;
+  }
+
+  return result;
+};
+
+exports.toArray = toArray;
 
 function configureObjectExtensions(options) {
   var _options = (0, _locustjsExtensionsOptions.configureOptions)(options);
@@ -124,6 +162,18 @@ function configureObjectExtensions(options) {
   if (typeof Object.prototype.forEach == 'undefined' || (0, _locustjsExtensionsOptions.shouldExtend)('forEach', _options)) {
     Object.prototype.forEach = function (callback) {
       return (0, _locustjsBase.forEach)(this, callback);
+    };
+  }
+
+  if (typeof Object.prototype.objectifyProps == 'undefined' || (0, _locustjsExtensionsOptions.shouldExtend)('objectifyProps', _options)) {
+    Object.prototype.objectifyProps = function () {
+      return objectifyProps(this);
+    };
+  }
+
+  if (typeof Object.prototype.toArray == 'undefined' || (0, _locustjsExtensionsOptions.shouldExtend)('toArray', _options)) {
+    Object.prototype.toArray = function () {
+      return toArray(this);
     };
   }
 }
