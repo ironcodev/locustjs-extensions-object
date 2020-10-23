@@ -22,39 +22,86 @@ const deepAssign = function (target, ...sources) {
 
 	return deepAssign(target, ...sources);
 }
-
-const objectifyProps = function(obj) {
-	let result;
-	
+function _flatten(obj, separator = '.', prefix = '', result){
 	if (isSomeObject(obj)) {
 		if (isArray(obj)) {
 			result = [];
 			
 			for (let item of obj) {
-				result.push(objectifyProps(item));
+				result.push(_flatten(item, separator));
+			}
+		} else {
+			result = {};
+			
+			for (let key of Object.keys(obj)) {
+				let _prefix = prefix ? prefix + separator + key : key;
+				const value = obj[key];
+				
+				if (isSomeObject(value)) {
+					if (isArray(value)) {
+						let r = [];
+						
+						for (let item of value) {
+							r.push(_flatten(item, separator));
+						}
+						
+						result[_prefix] = r;
+					} else {
+						_flatten(value, separator, _prefix, result);
+					}
+				} else {
+					result[_prefix] = value;
+				}
+			}
+		}
+	} else {
+		result = obj
+	}
+	
+	return result;
+}
+const flatten = function (obj, separator = '.') {
+	separator = isSomeString(separator) ? separator : '.';
+	
+	let result = _flatten(obj, separator);
+	
+	return result;
+}
+  
+const expand = function(obj, separator = '.') {
+	let result;
+	
+	if (isSomeObject(obj)) {
+		separator = isSomeString(separator) ? separator : '.';
+		
+		if (isArray(obj)) {
+			result = [];
+			
+			for (let item of obj) {
+				result.push(expand(item, separator));
 			}
 		} else {
 			result = {}
 			
 			for (let key of Object.keys(obj)) {
-				let dotIndex = key.indexOf('.');
+				let index = key.indexOf(separator);
 				
-				if (dotIndex < 0) {
+				if (index < 0) {
 					result[key] = obj[key];
 				} else {
 					let prevIndex = 0;
 					let prevObj = result;
 					
-					while (dotIndex >= 0) {
-						let subKey = key.substring(prevIndex, dotIndex);
+					while (index >= 0) {
+						let subKey = key.substring(prevIndex, index);
 						
 						if (!prevObj[subKey]) {
 							prevObj[subKey] = {}
 						}
 						
-						prevIndex = dotIndex + 1;
+						prevIndex = index + 1;
 						prevObj = prevObj[subKey];
-						dotIndex = key.indexOf('.', dotIndex + 1);
+						index = key.indexOf(separator, index + 1);
 					}
 					
 					prevObj[key.substr(prevIndex)] = obj[key];
@@ -118,9 +165,15 @@ function configureObjectExtensions(options) {
 		}
 	}
 	
-	if (typeof Object.prototype.objectifyProps == 'undefined' || shouldExtend('objectifyProps', _options)) {
-		Object.prototype.objectifyProps = function () {
-			return objectifyProps(this)
+	if (typeof Object.prototype.flatten == 'undefined' || shouldExtend('flatten', _options)) {
+		Object.prototype.flatten = function (separator) {
+			return flatten(this, separator)
+		}
+	}
+	
+	if (typeof Object.prototype.expand == 'undefined' || shouldExtend('expand', _options)) {
+		Object.prototype.expand = function (separator) {
+			return expand(this, separator)
 		}
 	}
 	
@@ -135,6 +188,7 @@ export default configureObjectExtensions
 
 export {
 	deepAssign,
-	objectifyProps,
+	flatten,
+	expand,
 	toArray
 }
