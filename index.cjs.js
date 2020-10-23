@@ -3,11 +3,17 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.deepAssign = exports.default = void 0;
+exports.objectifyProps = exports.deepAssign = exports.default = void 0;
 
 var _locustjsBase = require("locustjs-base");
 
 var _locustjsExtensionsOptions = require("locustjs-extensions-options");
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -35,6 +41,64 @@ var deepAssign = function deepAssign(target) {
 };
 
 exports.deepAssign = deepAssign;
+
+var objectifyProps = function objectifyProps(object) {
+  var result;
+
+  if ((0, _locustjsBase.isSomeObject)(object)) {
+    if ((0, _locustjsBase.isArray)(object)) {
+      result = [];
+
+      var _iterator = _createForOfIteratorHelper(object),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var item = _step.value;
+          result.push(objectifyProps(item));
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    } else {
+      result = {};
+
+      for (var _i = 0, _Object$keys = Object.keys(object); _i < _Object$keys.length; _i++) {
+        var key = _Object$keys[_i];
+        var dotIndex = key.indexOf('.');
+
+        if (dotIndex < 0) {
+          result[key] = object[key];
+        } else {
+          var prevIndex = 0;
+          var prevObj = result;
+
+          while (dotIndex >= 0) {
+            var subKey = key.substring(prevIndex, dotIndex);
+
+            if (!prevObj[subKey]) {
+              prevObj[subKey] = {};
+            }
+
+            prevIndex = dotIndex + 1;
+            prevObj = prevObj[subKey];
+            dotIndex = key.indexOf('.', dotIndex + 1);
+          }
+
+          prevObj[key.substr(prevIndex)] = object[key];
+        }
+      }
+    }
+  } else {
+    result = object;
+  }
+
+  return result;
+};
+
+exports.objectifyProps = objectifyProps;
 
 function configureObjectExtensions(options) {
   var _options = (0, _locustjsExtensionsOptions.configureOptions)(options);
