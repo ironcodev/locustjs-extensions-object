@@ -37,7 +37,7 @@ var deepAssign = function deepAssign(target) {
     }
   }
 
-  return Object.deepAssign.apply(Object, [target].concat(sources));
+  return deepAssign.apply(void 0, [target].concat(sources));
 };
 
 exports.deepAssign = deepAssign;

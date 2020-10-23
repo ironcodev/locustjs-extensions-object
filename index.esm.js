@@ -20,7 +20,7 @@ const deepAssign = function (target, ...sources) {
 		}
 	}
 
-	return Object.deepAssign(target, ...sources);
+	return deepAssign(target, ...sources);
 }
 
 const objectifyProps = function(obj) {
