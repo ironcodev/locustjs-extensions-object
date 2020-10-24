@@ -47,58 +47,54 @@ function _flatten(obj) {
   var prefix = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
   var result = arguments.length > 3 ? arguments[3] : undefined;
 
-  if ((0, _locustjsBase.isSomeObject)(obj)) {
-    if ((0, _locustjsBase.isArray)(obj)) {
-      result = [];
+  if ((0, _locustjsBase.isArray)(obj)) {
+    result = [];
 
-      var _iterator = _createForOfIteratorHelper(obj),
-          _step;
+    var _iterator = _createForOfIteratorHelper(obj),
+        _step;
 
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var item = _step.value;
-          result.push(_flatten(item, separator));
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var item = _step.value;
+        result.push(_flatten(item, separator));
       }
-    } else {
-      result = {};
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  } else if ((0, _locustjsBase.isSomeObject)(obj)) {
+    result = {};
 
-      for (var _i = 0, _Object$keys = Object.keys(obj); _i < _Object$keys.length; _i++) {
-        var key = _Object$keys[_i];
+    for (var _i = 0, _Object$keys = Object.keys(obj); _i < _Object$keys.length; _i++) {
+      var key = _Object$keys[_i];
 
-        var _prefix = prefix ? prefix + separator + key : key;
+      var _prefix = prefix ? prefix + separator + key : key;
 
-        var value = obj[key];
+      var value = obj[key];
 
-        if ((0, _locustjsBase.isSomeObject)(value)) {
-          if ((0, _locustjsBase.isArray)(value)) {
-            var r = [];
+      if ((0, _locustjsBase.isArray)(value)) {
+        var r = [];
 
-            var _iterator2 = _createForOfIteratorHelper(value),
-                _step2;
+        var _iterator2 = _createForOfIteratorHelper(value),
+            _step2;
 
-            try {
-              for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-                var _item = _step2.value;
-                r.push(_flatten(_item, separator));
-              }
-            } catch (err) {
-              _iterator2.e(err);
-            } finally {
-              _iterator2.f();
-            }
-
-            result[_prefix] = r;
-          } else {
-            _flatten(value, separator, _prefix, result);
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var _item = _step2.value;
+            r.push(_flatten(_item, separator));
           }
-        } else {
-          result[_prefix] = value;
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
         }
+
+        result[_prefix] = r;
+      } else if ((0, _locustjsBase.isSomeObject)(value)) {
+        _flatten(value, separator, _prefix, result);
+      } else {
+        result[_prefix] = value;
       }
     }
   } else {
@@ -122,53 +118,50 @@ exports.flatten = flatten;
 var expand = function expand(obj) {
   var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '.';
   var result;
+  separator = isSomeString(separator) ? separator : '.';
 
-  if ((0, _locustjsBase.isSomeObject)(obj)) {
-    separator = isSomeString(separator) ? separator : '.';
+  if ((0, _locustjsBase.isArray)(obj)) {
+    result = [];
 
-    if ((0, _locustjsBase.isArray)(obj)) {
-      result = [];
+    var _iterator3 = _createForOfIteratorHelper(obj),
+        _step3;
 
-      var _iterator3 = _createForOfIteratorHelper(obj),
-          _step3;
-
-      try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var item = _step3.value;
-          result.push(expand(item, separator));
-        }
-      } catch (err) {
-        _iterator3.e(err);
-      } finally {
-        _iterator3.f();
+    try {
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+        var item = _step3.value;
+        result.push(expand(item, separator));
       }
-    } else {
-      result = {};
+    } catch (err) {
+      _iterator3.e(err);
+    } finally {
+      _iterator3.f();
+    }
+  } else if ((0, _locustjsBase.isSomeObject)(obj)) {
+    result = {};
 
-      for (var _i2 = 0, _Object$keys2 = Object.keys(obj); _i2 < _Object$keys2.length; _i2++) {
-        var key = _Object$keys2[_i2];
-        var index = key.indexOf(separator);
+    for (var _i2 = 0, _Object$keys2 = Object.keys(obj); _i2 < _Object$keys2.length; _i2++) {
+      var key = _Object$keys2[_i2];
+      var index = key.indexOf(separator);
 
-        if (index < 0) {
-          result[key] = obj[key];
-        } else {
-          var prevIndex = 0;
-          var prevObj = result;
+      if (index < 0) {
+        result[key] = obj[key];
+      } else {
+        var prevIndex = 0;
+        var prevObj = result;
 
-          while (index >= 0) {
-            var subKey = key.substring(prevIndex, index);
+        while (index >= 0) {
+          var subKey = key.substring(prevIndex, index);
 
-            if (!prevObj[subKey]) {
-              prevObj[subKey] = {};
-            }
-
-            prevIndex = index + 1;
-            prevObj = prevObj[subKey];
-            index = key.indexOf(separator, index + 1);
+          if (!prevObj[subKey]) {
+            prevObj[subKey] = {};
           }
 
-          prevObj[key.substr(prevIndex)] = obj[key];
+          prevIndex = index + 1;
+          prevObj = prevObj[subKey];
+          index = key.indexOf(separator, index + 1);
         }
+
+        prevObj[key.substr(prevIndex)] = obj[key];
       }
     }
   } else {

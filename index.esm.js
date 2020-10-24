@@ -23,35 +23,31 @@ const deepAssign = function (target, ...sources) {
 	return deepAssign(target, ...sources);
 }
 function _flatten(obj, separator = '.', prefix = '', result){
-	if (isSomeObject(obj)) {
-		if (isArray(obj)) {
-			result = [];
+	if (isArray(obj)) {
+		result = [];
+		
+		for (let item of obj) {
+			result.push(_flatten(item, separator));
+		}
+	} else if (isSomeObject(obj)) {
+		result = {};
 			
-			for (let item of obj) {
-				result.push(_flatten(item, separator));
-			}
-		} else {
-			result = {};
+		for (let key of Object.keys(obj)) {
+			let _prefix = prefix ? prefix + separator + key : key;
+			const value = obj[key];
 			
-			for (let key of Object.keys(obj)) {
-				let _prefix = prefix ? prefix + separator + key : key;
-				const value = obj[key];
+			if (isArray(value)) {
+				let r = [];
 				
-				if (isSomeObject(value)) {
-					if (isArray(value)) {
-						let r = [];
-						
-						for (let item of value) {
-							r.push(_flatten(item, separator));
-						}
-						
-						result[_prefix] = r;
-					} else {
-						_flatten(value, separator, _prefix, result);
-					}
-				} else {
-					result[_prefix] = value;
+				for (let item of value) {
+					r.push(_flatten(item, separator));
 				}
+				
+				result[_prefix] = r;
+			} else if (isSomeObject(value)) {
+				_flatten(value, separator, _prefix, result);
+			} else {
+				result[_prefix] = value;
 			}
 		}
 	} else {
@@ -71,41 +67,39 @@ const flatten = function (obj, separator = '.') {
 const expand = function(obj, separator = '.') {
 	let result;
 	
-	if (isSomeObject(obj)) {
-		separator = isSomeString(separator) ? separator : '.';
+	separator = isSomeString(separator) ? separator : '.';
+	
+	if (isArray(obj)) {
+		result = [];
 		
-		if (isArray(obj)) {
-			result = [];
+		for (let item of obj) {
+			result.push(expand(item, separator));
+		}
+	} else if (isSomeObject(obj)) {
+		result = {}
 			
-			for (let item of obj) {
-				result.push(expand(item, separator));
-			}
-		} else {
-			result = {}
+		for (let key of Object.keys(obj)) {
+			let index = key.indexOf(separator);
 			
-			for (let key of Object.keys(obj)) {
-				let index = key.indexOf(separator);
+			if (index < 0) {
+				result[key] = obj[key];
+			} else {
+				let prevIndex = 0;
+				let prevObj = result;
 				
-				if (index < 0) {
-					result[key] = obj[key];
-				} else {
-					let prevIndex = 0;
-					let prevObj = result;
+				while (index >= 0) {
+					let subKey = key.substring(prevIndex, index);
 					
-					while (index >= 0) {
-						let subKey = key.substring(prevIndex, index);
-						
-						if (!prevObj[subKey]) {
-							prevObj[subKey] = {}
-						}
-						
-						prevIndex = index + 1;
-						prevObj = prevObj[subKey];
-						index = key.indexOf(separator, index + 1);
+					if (!prevObj[subKey]) {
+						prevObj[subKey] = {}
 					}
 					
-					prevObj[key.substr(prevIndex)] = obj[key];
+					prevIndex = index + 1;
+					prevObj = prevObj[subKey];
+					index = key.indexOf(separator, index + 1);
 				}
+				
+				prevObj[key.substr(prevIndex)] = obj[key];
 			}
 		}
 	} else {
