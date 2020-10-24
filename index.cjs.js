@@ -106,7 +106,7 @@ function _flatten(obj) {
 
 var flatten = function flatten(obj) {
   var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '.';
-  separator = isSomeString(separator) ? separator : '.';
+  separator = (0, _locustjsBase.isSomeString)(separator) ? separator : '.';
 
   var result = _flatten(obj, separator);
 
@@ -118,7 +118,7 @@ exports.flatten = flatten;
 var expand = function expand(obj) {
   var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '.';
   var result;
-  separator = isSomeString(separator) ? separator : '.';
+  separator = (0, _locustjsBase.isSomeString)(separator) ? separator : '.';
 
   if ((0, _locustjsBase.isArray)(obj)) {
     result = [];

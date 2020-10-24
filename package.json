@@ -1,6 +1,6 @@
 {
   "name": "locustjs-extensions-object",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "This library contains extension methods for Object",
   "main": "index.cjs.js",
   "module": "index.esm.js",

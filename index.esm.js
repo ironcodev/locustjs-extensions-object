@@ -1,4 +1,4 @@
-import { isObject, forEach, isSubClassOf, isArray, isSomeObject } from 'locustjs-base'
+import { isObject, forEach, isSubClassOf, isArray, isSomeObject, isSomeString } from 'locustjs-base'
 import { configureOptions, shouldExtend } from 'locustjs-extensions-options'
 
 //source: https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
