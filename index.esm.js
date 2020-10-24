@@ -30,8 +30,10 @@ function _flatten(obj, separator = '.', prefix = '', result){
 			result.push(_flatten(item, separator));
 		}
 	} else if (isSomeObject(obj)) {
-		result = {};
-			
+		if (!result) {
+			result = {};
+		}
+		
 		for (let key of Object.keys(obj)) {
 			let _prefix = prefix ? prefix + separator + key : key;
 			const value = obj[key];

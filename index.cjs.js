@@ -64,7 +64,9 @@ function _flatten(obj) {
       _iterator.f();
     }
   } else if ((0, _locustjsBase.isSomeObject)(obj)) {
-    result = {};
+    if (!result) {
+      result = {};
+    }
 
     for (var _i = 0, _Object$keys = Object.keys(obj); _i < _Object$keys.length; _i++) {
       var key = _Object$keys[_i];
