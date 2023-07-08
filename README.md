@@ -1,6 +1,23 @@
 # About
 This library contains extension methods for `Object`.
 
+# Install
+```
+npm i @locustjs/extensions-object
+```
+
+# Usage
+
+CommonJs
+```javascript
+var someFn = require('@locustjs/extensions-object').someFn;
+```
+
+ES6
+```javascript
+import { someFn } from '@locustjs/extensions-object'
+```
+
 # function methods
 ## `isSubClassOf(obj, classType)`
 Checks whether `obj` is a sub-class of `classType` or not and returns `true` | `false`.
