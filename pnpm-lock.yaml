@@ -9,8 +9,8 @@ dependencies:
     specifier: ^2.1.0
     version: 2.1.0
   '@locustjs/extensions-options':
-    specifier: ^2.0.1
-    version: 2.0.1
+    specifier: ^2.1.1
+    version: 2.1.1
 
 devDependencies:
   '@babel/cli':
@@ -283,8 +283,8 @@ packages:
     resolution: {integrity: sha512-o650/LAmcdjpJzGh36JDVJ4FXvFk4EFp4/g56RNlpfmLvgbeP8Zb/OPUucql+DkBhksbtkDLUNIFVnQMi+G4Iw==}
     dev: false
 
-  /@locustjs/extensions-options@2.0.1:
-    resolution: {integrity: sha512-t6Tv7Fp8q2O7FU5RiJ4ueidUKloCLsC6rKZlEo7hzLJKlr3ddIjQ6IuOzm5sJrKnHysy2uHPToWqm0nmgWfAaA==}
+  /@locustjs/extensions-options@2.1.1:
+    resolution: {integrity: sha512-rNFmdKC6jmuoqLpVTy1GQ/2kgXzpEIyJAdaatLrA9CmSmhNcvTi0HlgnZNT6ukgyT+pzQioYUFQlT2Ud52arCQ==}
     dependencies:
       '@locustjs/base': 2.1.0
     dev: false

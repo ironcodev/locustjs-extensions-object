@@ -19,8 +19,8 @@ import { someFn } from '@locustjs/extensions-object'
 ```
 
 # function methods
-## `isSubClassOf(obj, classType)`
-Checks whether `obj` is a sub-class of `classType` or not and returns `true` | `false`.
+## `Class.isSubClassOf(parentClass)`
+Checks whether `Class` is a sub-class of `parentClass` or not and returns `true` | `false`.
 
 Example:
 ```javascript
@@ -28,23 +28,14 @@ class Foo { }
 class Bar extends Foo { }
 class Buz { }
 
-const x = new Bar();
-
-// call directly
-console.log(isSubClassOf(x, Bar));  // true
-console.log(isSubClassOf(x, Foo));  // true
-console.log(isSubClassOf(x, Buz));  // false
-
-// as an extension method
-console.log(x.isSubClassOf(Bar));  // true
-console.log(x.isSubClassOf(Foo));  // true
-console.log(x.isSubClassOf(Buz));  // false
+Bar.isSubClassOf(Foo);  // true
+Buz.isSubClassOf(Foo);  // false
 ```
 
-## `toJson(obj, replacer, space)`
+## `toJson(obj, replacer, space, filter)`
 Serializes `obj` into json format using `JSON.stringify` function.
 
-Example:
+Example 1: 
 ```javascript
 const x = { name: 'John Doe', age: 23 };
 

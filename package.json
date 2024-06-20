@@ -1,6 +1,6 @@
 {
   "name": "@locustjs/extensions-object",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "This library contains extension methods for Object",
   "main": "index.cjs.js",
   "module": "index.esm.js",
@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "@locustjs/base": "^2.1.0",
-    "@locustjs/extensions-options": "^2.0.1"
+    "@locustjs/extensions-options": "^2.1.1"
   }
 }
