@@ -191,13 +191,35 @@ function clean(obj, filter) {
     _filter = value => value === null && (all || null_or_empty || nulls) || value === undefined && (all || null_or_empty || undefineds) || isArray(value) && value.length == 0 && (all || empty_array) || isObject(value) && Object.keys(value).length == 0 && (all || empty_object) || isString(value) && value.length == 0 && (all || empty_string) || isString(value) && value.trim().length == 0 && (all || white_string) || isNumber(value) && isNaN(value) && (all || null_or_empty || nan) || isNumber(value) && value == 0 && (all || zero_number);
   } else if (isFunction(filter)) {
     _filter = filter;
-  } else {
-    _filter = () => false;
   }
-  return _clean(obj, _filter);
+  return _filter ? _clean(obj, _filter) : obj;
 }
-function toJson(obj, replacer, space, filter) {
+function toJson(obj, filter, replacer, space) {
   return JSON.stringify(clean(obj, filter), replacer, space);
+}
+function query(obj, path) {
+  let result;
+  if (isSomeObject(obj) && isSomeString(path)) {
+    let current = obj;
+    let paths = path.split(".");
+    let i = 0;
+    let found = false;
+    while (true) {
+      current = current[paths[i]];
+      if (i == paths.length - 1) {
+        found = true;
+        break;
+      }
+      if (current == undefined) {
+        break;
+      }
+      i++;
+    }
+    if (found) {
+      result = current;
+    }
+  }
+  return result;
 }
 function configureObjectExtensions(options) {
   const eh = new ExtensionHelper(options, console);
@@ -205,6 +227,9 @@ function configureObjectExtensions(options) {
     return isSubClassOf(this, parent);
   });
   eh.extend(Object, "clean", function (filter) {
+    return clean(this, filter);
+  });
+  eh.extend(Array, "clean", function (filter) {
     return clean(this, filter);
   });
   eh.extend(Object, "toJson", function (...args) {
@@ -225,6 +250,9 @@ function configureObjectExtensions(options) {
   eh.extend(Object, "toArray", function (type) {
     return toArray(this, type);
   });
+  eh.extend(Object, "query", function (path) {
+    return query(this, path);
+  });
 }
 export default configureObjectExtensions;
-export { merge, flatten, unflatten, toArray, clean, toJson };
+export { merge, flatten, unflatten, toArray, clean, toJson, query };

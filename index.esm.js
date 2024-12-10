@@ -9,6 +9,7 @@ import {
   isFunction,
   isNumber,
   isPrimitive,
+  isNullOrEmpty,
 } from "@locustjs/base";
 import ExtensionHelper from "@locustjs/extensions-options";
 
@@ -20,7 +21,11 @@ const merge = function (target, ...sources) {
 
   const source = sources.shift();
 
-  if (isObject(target) && isObject(source)) {
+  if (isObject(source)) {
+    if (isNullOrEmpty(target)) {
+      target = {};
+    }
+
     for (const key in source) {
       if (isObject(source[key])) {
         if (target[key] === undefined) {
@@ -99,7 +104,7 @@ const unflatten = function (obj, separator = ".") {
       let index = key.indexOf(separator);
 
       if (index < 0) {
-        result[key] = obj[key];
+        result[key] = unflatten(obj[key], separator);
       } else {
         let prevIndex = 0;
         let prevObj = result;
@@ -224,6 +229,8 @@ function _clean(obj, filter) {
           }
         }
       });
+    } else {
+      result = obj;
     }
   }
 
@@ -231,6 +238,10 @@ function _clean(obj, filter) {
 }
 function clean(obj, filter) {
   let _filter;
+
+  if (filter === undefined) {
+    filter = "null,undefined,nan,string,empty";
+  }
 
   if (isString(filter)) {
     const types = filter
@@ -240,34 +251,72 @@ function clean(obj, filter) {
     const all = types.indexOf("all") >= 0;
     const nulls = types.indexOf("null") >= 0;
     const undefineds = types.indexOf("undefined") >= 0;
-    const empty_array = types.indexOf("empty_array") >= 0;
-    const empty_object = types.indexOf("empty_object") >= 0;
-    const empty_string = types.indexOf("empty_string") >= 0;
-    const white_string = types.indexOf("white_string") >= 0;
+    const empty_array = types.indexOf("array") >= 0;
+    const empty_object = types.indexOf("object") >= 0;
+    const empty_string = types.indexOf("string") >= 0;
+    const white_string = types.indexOf("whitespace") >= 0;
     const nan = types.indexOf("nan") >= 0;
-    const zero_number = types.indexOf("zero_number") >= 0;
-    const null_or_empty = nulls || undefineds;
+    const zero_number = types.indexOf("zero") >= 0;
+    const empty = types.indexOf("empty") >= 0;
 
     _filter = (value) =>
-      (value === null && (all || null_or_empty || nulls)) ||
-      (value === undefined && (all || null_or_empty || undefineds)) ||
+      (isNullOrEmpty(value) && (all || empty)) ||
+      (value === null && (all || nulls)) ||
+      (value === undefined && (all || undefineds)) ||
       (isArray(value) && value.length == 0 && (all || empty_array)) ||
       (isObject(value) &&
+        value !== null &&
         Object.keys(value).length == 0 &&
         (all || empty_object)) ||
       (isString(value) && value.length == 0 && (all || empty_string)) ||
       (isString(value) && value.trim().length == 0 && (all || white_string)) ||
-      (isNumber(value) && isNaN(value) && (all || null_or_empty || nan)) ||
+      (isNumber(value) && isNaN(value) && (all || nan)) ||
       (isNumber(value) && value == 0 && (all || zero_number));
   } else if (isFunction(filter)) {
     _filter = filter;
   }
 
-  return _filter ? _clean(obj, _filter): obj;
+  return _filter ? _clean(obj, _filter) : obj;
 }
 
 function toJson(obj, filter, replacer, space) {
+  if (filter === undefined) {
+    filter = "";
+  }
+
   return JSON.stringify(clean(obj, filter), replacer, space);
+}
+
+function query(obj, path) {
+  let result;
+
+  if (isSomeObject(obj) && isSomeString(path)) {
+    let current = obj;
+    let paths = path.split(".");
+    let i = 0;
+    let found = false;
+
+    while (true) {
+      current = current[paths[i]];
+
+      if (i == paths.length - 1) {
+        found = true;
+        break;
+      }
+
+      if (current == undefined) {
+        break;
+      }
+
+      i++;
+    }
+
+    if (found) {
+      result = current;
+    }
+  }
+
+  return result;
 }
 
 function configureObjectExtensions(options) {
@@ -307,8 +356,12 @@ function configureObjectExtensions(options) {
   eh.extend(Object, "toArray", function (type) {
     return toArray(this, type);
   });
+
+  eh.extend(Object, "query", function (path) {
+    return query(this, path);
+  });
 }
 
 export default configureObjectExtensions;
 
-export { merge, flatten, unflatten, toArray, clean, toJson };
+export { merge, flatten, unflatten, toArray, clean, toJson, query };
