@@ -1,4 +1,4 @@
-import { isObject, forEach, isSubClassOf, isArray, isSomeObject, isSomeString, isString, isFunction, isNumber, isPrimitive, isNullOrEmpty } from "@locustjs/base";
+import { isObject, forEach, isSubClassOf, isArray, isSomeObject, isSomeString, isString, isFunction, isNumber, isPrimitive, isNullOrEmpty, query } from "@locustjs/base";
 import ExtensionHelper from "@locustjs/extensions-options";
 
 //source: https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
@@ -207,30 +207,6 @@ function toJson(obj, filter, replacer, space) {
     filter = "";
   }
   return JSON.stringify(clean(obj, filter), replacer, space);
-}
-function query(obj, path) {
-  let result;
-  if (isSomeObject(obj) && isSomeString(path)) {
-    let current = obj;
-    let paths = path.split(".");
-    let i = 0;
-    let found = false;
-    while (true) {
-      current = current[paths[i]];
-      if (i == paths.length - 1) {
-        found = true;
-        break;
-      }
-      if (current == undefined) {
-        break;
-      }
-      i++;
-    }
-    if (found) {
-      result = current;
-    }
-  }
-  return result;
 }
 function configureObjectExtensions(options) {
   const eh = new ExtensionHelper(options, console);

@@ -1,6 +1,6 @@
 {
   "name": "@locustjs/extensions-object",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "This library contains extension methods for Object",
   "main": "index.cjs.js",
   "module": "index.esm.js",
@@ -14,7 +14,8 @@
   },
   "keywords": [
     "locustjs",
-    "extensions"
+    "extensions",
+    "object"
   ],
   "author": "Iron Code",
   "license": "MIT",
@@ -29,7 +30,7 @@
     "esm": "^3.2.25"
   },
   "dependencies": {
-    "@locustjs/base": "^2.1.0",
+    "@locustjs/base": "^4.1.0",
     "@locustjs/extensions-options": "^2.1.1"
   }
 }

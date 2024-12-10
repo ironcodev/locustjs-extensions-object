@@ -10,6 +10,7 @@ import {
   isNumber,
   isPrimitive,
   isNullOrEmpty,
+  query
 } from "@locustjs/base";
 import ExtensionHelper from "@locustjs/extensions-options";
 
@@ -285,38 +286,6 @@ function toJson(obj, filter, replacer, space) {
   }
 
   return JSON.stringify(clean(obj, filter), replacer, space);
-}
-
-function query(obj, path) {
-  let result;
-
-  if (isSomeObject(obj) && isSomeString(path)) {
-    let current = obj;
-    let paths = path.split(".");
-    let i = 0;
-    let found = false;
-
-    while (true) {
-      current = current[paths[i]];
-
-      if (i == paths.length - 1) {
-        found = true;
-        break;
-      }
-
-      if (current == undefined) {
-        break;
-      }
-
-      i++;
-    }
-
-    if (found) {
-      result = current;
-    }
-  }
-
-  return result;
 }
 
 function configureObjectExtensions(options) {
