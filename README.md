@@ -58,7 +58,7 @@ console.log(toJson(x, "all"));
 ```
 
 ## `merge(obj, obj1, obj2, ...)`
-While `Object.assign()` and `destructure ... operator` perform shallow merge, the `merge` function provides deep merging objects.
+While `Object.assign()` and `destructure ... operator` perform shallow merge, the `merge` function provides deep merging.
 It should be noted that The source object is affected.
 
 Example:
