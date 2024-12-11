@@ -14,13 +14,13 @@ const tests = [
     function (expect) {
       const result = merge(null, {});
 
-      expect(JSON.stringify(result)).toBe('{}');
+      expect(JSON.stringify(result)).toBe("{}");
     },
   ],
   [
     "merge: 3",
     function (expect) {
-      const result = merge({a: 10}, {b: true});
+      const result = merge({ a: 10 }, { b: true });
 
       expect(JSON.stringify(result)).toBe('{"a":10,"b":true}');
     },
@@ -35,6 +35,25 @@ const tests = [
       const result = merge(x, a, b);
 
       expect(JSON.stringify(result)).toBe('{"name":"John","a":10,"b":"test"}');
+    },
+  ],
+  [
+    "merge: 5",
+    function (expect) {
+      const result = merge(
+        {
+          person: {
+            name: "ali",
+          },
+        },
+        {
+          person: {
+            age: 23,
+          },
+        }
+      );
+
+      expect(JSON.stringify(result)).toBe('{"person":{"name":"ali","age":23}}');
     },
   ],
 ];

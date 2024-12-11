@@ -58,19 +58,22 @@ console.log(toJson(x, "all"));
 ```
 
 ## `merge(obj, obj1, obj2, ...)`
-Performs a deep merge on `obj` by given objects.
+While `Object.assign()` and `destructure ... operator` perform shallow merge, the `merge` function provides deep merging objects.
+It should be nted that The source object is affected.
 
 Example:
 ```javascript
-const x = { name: 'John' };
-const a = { a: 10 }
-const b = { b: 'test' }
+const a = { person: { name: 'John' } };
+const b = { person: { age: 23 } }
+
+console.log(Object.assign({}, a, b));	// { person: { age: 23 } }
+console.log({ ...a, ...b });	// { person: { age: 23 } }
 
 // call directly
-console.log(merge(x, a, b));  // { name: 'John', a: 10, b: 'test' }
+console.log(merge(a, b));  // { person: { name: 'John', age: 23 } }
 
 // as an extension method
-console.log(x.merge(a, b));  // { name: 'John', a: 10, b: 'test' }
+console.log(a.merge(b));
 ```
 
 ## `flatten(obj, separator)`
