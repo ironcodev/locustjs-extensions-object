@@ -213,21 +213,21 @@ var _merge = function merge(target) {
     return target;
   }
   var source = sources.shift();
-  if (base.isObject(source)) {
-    if (base.isNullOrEmpty(target)) {
-      target = {};
-    }
-    for (var key in source) {
-      if (base.isObject(source[key])) {
-        if (target[key] === undefined) {
-          target[key] = {};
-        }
-        _merge(target[key], source[key]);
-      } else {
-        Object.assign(target, _defineProperty({}, key, source[key]));
-      }
-    }
+  if (base.isNullOrEmpty(target)) {
+    target = base.isNullOrUndefined(source) ? null : {};
   }
+  base.foreach(source, function (_ref) {
+    var key = _ref.key,
+      value = _ref.value;
+    if (base.isObject(value)) {
+      if (base.isNullOrUndefined(target[key])) {
+        target[key] = {};
+      }
+      _merge(target[key], value);
+    } else {
+      Object.assign(target, _defineProperty({}, key, value));
+    }
+  });
   return _merge.apply(undefined, [target].concat(sources));
 };
 
@@ -364,7 +364,7 @@ function configureObjectExtensions(options, logger) {
     for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
-    _merge.apply(undefined, [this].concat(args));
+    return _merge.apply(undefined, [this].concat(args));
   });
   eh.extend(Object, "foreach", function (callback) {
     return base.foreach(this, callback);
