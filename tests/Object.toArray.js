@@ -1,15 +1,17 @@
-import { toArray } from "../src";
+import { configureObjectExtensions } from "../src";
+
+configureObjectExtensions("toArray");
 
 const tests = [
   [
-    "toArray: 1",
+    "Object.toArray: 1",
     function (expect) {
       const x = {
         name: "John",
         age: 23,
         active: true,
       };
-      const result = toArray(x, "key/value");
+      const result = x.toArray("key/value");
 
       expect(result).toBeArray();
       expect(result.length).toBe(3);
@@ -31,7 +33,7 @@ const tests = [
     },
   ],
   [
-    "toArray: 2",
+    "Object.toArray: 2",
     function (expect) {
       const x = {
         name: "John",
@@ -40,7 +42,7 @@ const tests = [
           zip: "12345678",
         },
       };
-      const result = toArray(x, "key/value");
+      const result = x.toArray("key/value");
 
       expect(result).toBeArray();
       expect(result.length).toBe(2);
@@ -74,14 +76,14 @@ const tests = [
     },
   ],
   [
-    "toArray: 3",
+    "Object.toArray: 3",
     function (expect) {
       const x = {
         name: "John",
         age: 23,
         active: true,
       };
-      const result = toArray(x, "keys");
+      const result = x.toArray("keys");
 
       expect(result).toBeArray();
       expect(result.length).toBe(3);
@@ -89,14 +91,14 @@ const tests = [
     },
   ],
   [
-    "toArray: 4",
+    "Object.toArray: 4",
     function (expect) {
       const x = {
         name: "John",
         age: 23,
         active: true,
       };
-      const result = toArray(x, "values");
+      const result = x.toArray("values");
 
       expect(result).toBeArray();
       expect(result.length).toBe(3);

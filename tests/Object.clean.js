@@ -1,98 +1,100 @@
-import { clean } from "../src";
+import { configureObjectExtensions } from "../src";
+
+configureObjectExtensions('clean')
 
 const tests = [
   [
-    "clean: 1",
+    "Object.clean: 1",
     function (expect) {
       const x = { a: 10, b: null, c: undefined };
-      const result = clean(x);
+      const result = x.clean();
 
       expect(Object.keys(result).join(",")).toBe(`a`);
     },
   ],
   [
-    "clean: 2",
+    "Object.clean: 2",
     function (expect) {
       const x = { a: 10, b: null, c: undefined };
-      const result = clean(x, "null");
+      const result = x.clean("null");
 
       expect(Object.keys(result).join(",")).toBe(`a,c`);
     },
   ],
   [
-    "clean: 3",
+    "Object.clean: 3",
     function (expect) {
       const x = { a: 10, b: null, c: undefined };
-      const result = clean(x, "null,undefined");
+      const result = x.clean("null,undefined");
 
       expect(Object.keys(result).join(",")).toBe(`a`);
     },
   ],
   [
-    "clean: 4",
+    "Object.clean: 4",
     function (expect) {
       const x = { a: 10, b: null, c: undefined, d: [] };
-      const result = clean(x, "array");
+      const result = x.clean("array");
 
       expect(Object.keys(result).join(",")).toBe(`a,b,c`);
     },
   ],
   [
-    "clean: 5",
+    "Object.clean: 5",
     function (expect) {
       const x = { a: 10, b: null, c: undefined, d: [] };
-      const result = clean(x, "array,empty");
+      const result = x.clean("array,empty");
 
       expect(Object.keys(result).join(",")).toBe(`a`);
     },
   ],
   [
-    "clean: 6",
+    "Object.clean: 6",
     function (expect) {
       const x = { a: 10, b: null, c: {} };
-      const result = clean(x, "object");
+      const result = x.clean("object");
 
       expect(Object.keys(result).join(",")).toBe(`a,b`);
     },
   ],
   [
-    "clean: 7",
+    "Object.clean: 7",
     function (expect) {
       const x = { a: 10, b: null, c: undefined, d: [], e: {} };
-      const result = clean(x, "array,empty,object");
+      const result = x.clean("array,empty,object");
 
       expect(Object.keys(result).join(",")).toBe(`a`);
     },
   ],
   [
-    "clean: 8",
+    "Object.clean: 8",
     function (expect) {
       const x = { a: 10, b: null, c: undefined, d: 0 };
-      const result = clean(x, "zero");
+      const result = x.clean("zero");
 
       expect(Object.keys(result).join(",")).toBe(`a,b,c`);
     },
   ],
   [
-    "clean: 9",
+    "Object.clean: 9",
     function (expect) {
       const x = { a: 10, b: null, c: undefined, d: 0, e: "" };
-      const result = clean(x, "string");
+      const result = x.clean("string");
 
       expect(Object.keys(result).join(",")).toBe(`a,b,c,d`);
     },
   ],
   [
-    "clean: 10",
+    "Object.clean: 10",
     function (expect) {
       const x = { a: 10, b: null, c: undefined, d: 0, e: "", f: "   " };
-      const result = clean(x, "whitespace");
+      const result = x.clean("whitespace");
 
       expect(Object.keys(result).join(",")).toBe(`a,b,c,d`);
     },
   ],
   [
-    "clean: 11",
+    "Object.clean: 11",
     function (expect) {
       const x = {
         a: 10,
@@ -104,7 +106,7 @@ const tests = [
         g: "",
         h: "   ",
       };
-      const result = clean(x, "all");
+      const result = x.clean("all");
 
       expect(Object.keys(result).join(",")).toBe(`a`);
     },

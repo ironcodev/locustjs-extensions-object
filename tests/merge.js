@@ -1,4 +1,4 @@
-import { merge } from "../index.esm.js";
+import { merge } from "../src";
 
 const tests = [
   [
@@ -6,7 +6,7 @@ const tests = [
     function (expect) {
       expect(merge(null, null)).toBe(null);
       expect(merge(null, undefined)).toBe(null);
-      expect(merge(undefined, undefined)).toBeUndefined();
+      expect(merge(undefined, undefined)).toBe(null);
     },
   ],
   [

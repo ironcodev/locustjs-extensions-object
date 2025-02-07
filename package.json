@@ -1,11 +1,11 @@
 {
   "name": "@locustjs/extensions-object",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "description": "This library contains extension methods for Object",
-  "main": "index.cjs.js",
-  "module": "index.esm.js",
+  "main": "dist/index.js",
+  "module": "src/index.js",
   "scripts": {
-    "build": "babel index.esm.js -o index.cjs.js",
+    "build": "rollup -c",
     "test": "node -r esm ./tests/index.js"
   },
   "repository": {
@@ -24,13 +24,14 @@
   },
   "homepage": "https://github.com/ironcodev/locustjs-extensions-object#readme",
   "devDependencies": {
-    "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.22.7",
-    "@locustjs/test": "^1.6.2",
-    "esm": "^3.2.25"
+    "@babel/preset-env": "^7.26.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "esm": "^3.2.25",
+    "rollup": "^4.29.1",
+    "@locustjs/test": "^2.0.1"
   },
   "dependencies": {
-    "@locustjs/base": "^4.1.0",
-    "@locustjs/extensions-options": "^2.1.1"
+    "@locustjs/base": "^4.4.0",
+    "@locustjs/extensions-options": "^2.2.2"
   }
 }

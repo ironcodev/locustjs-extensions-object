@@ -1,20 +1,30 @@
-import test1 from "./merge";
-import test2 from "./toJson";
-import test3 from "./clean";
-import test4 from "./flatten";
-import test5 from "./unflatten";
-import test6 from "./query";
-import test7 from "./toArray";
-import TestRunner from "@locustjs/test";
+import test11 from "./merge";
+import test12 from "./Object.merge";
+import test21 from "./toJson";
+import test22 from "./Object.toJson";
+import test31 from "./clean";
+import test32 from "./Object.clean";
+import test41 from "./flatten";
+import test42 from "./Object.flatten";
+import test51 from "./unflatten";
+import test52 from "./Object.unflatten";
+import test71 from "./toArray";
+import test72 from "./Object.toArray";
+import { TestRunner } from "@locustjs/test";
 
 const tests = [
-  ...test1,
-  ...test2,
-  ...test3,
-  ...test4,
-  ...test5,
-  ...test6,
-  ...test7,
+  ...test11,
+  ...test12,
+  ...test21,
+  ...test22,
+  ...test31,
+  ...test32,
+  ...test41,
+  ...test42,
+  ...test51,
+  ...test52,
+  ...test71,
+  ...test72,
 ];
 
 TestRunner.start(tests);

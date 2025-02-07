@@ -1,8 +1,10 @@
-import { unflatten } from "../src";
+import { configureObjectExtensions } from "../src";
+
+configureObjectExtensions("unflatten");
 
 const tests = [
   [
-    "unflatten: 1",
+    "Object.unflatten: 1",
     function (expect) {
       const x = {
         name: "John",
@@ -10,7 +12,7 @@ const tests = [
         "address.city.name": "Tehran",
         "address.zip": "12345678",
       };
-      const result = unflatten(x);
+      const result = x.unflatten();
 
       expect(Object.keys(result).join(",")).toBe(`name,address`);
       expect(result.address).toBeObject();

@@ -1,8 +1,10 @@
-import { flatten } from "../src";
+import { configureObjectExtensions } from "../src";
+
+configureObjectExtensions('flatten')
 
 const tests = [
   [
-    "flatten: 1",
+    "Object.flatten: 1",
     function (expect) {
       const x = {
         name: "John",
@@ -11,7 +13,7 @@ const tests = [
           zip: "12345678",
         },
       };
-      const result = flatten(x);
+      const result = x.flatten();
 
       expect(Object.keys(result).join(",")).toBe(
         `name,address.city.id,address.city.name,address.zip`
