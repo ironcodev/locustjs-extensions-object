@@ -1,6 +1,6 @@
 {
   "name": "@locustjs/extensions-object",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "This library contains extension methods for Object",
   "main": "dist/index.js",
   "module": "src/index.js",
@@ -31,7 +31,7 @@
     "@locustjs/test": "^2.0.1"
   },
   "dependencies": {
-    "@locustjs/base": "^4.4.0",
+    "@locustjs/base": "^4.4.1",
     "@locustjs/extensions-options": "^2.2.2"
   }
 }
