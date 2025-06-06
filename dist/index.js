@@ -332,7 +332,7 @@ var _unflatten = function unflatten(obj) {
           prevObj = prevObj[subKey];
           index = key.indexOf(separator, index + 1);
         }
-        prevObj[key.substr(prevIndex)] = obj[key];
+        prevObj[key.substr(prevIndex)] = _unflatten(obj[key], separator);
       }
     }
   } else {
@@ -360,12 +360,14 @@ function configureObjectExtensions(options, logger) {
     }
     return toJson.apply(undefined, [this].concat(args));
   });
+  eh.extend(Array, "toJson", toJson, true);
   eh.extend(Object, "merge", function () {
     for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
     return _merge.apply(undefined, [this].concat(args));
   });
+  eh.extend(Array, "merge", _merge, true);
   eh.extend(Object, "foreach", function (callback) {
     return base.foreach(this, callback);
   });
@@ -373,12 +375,15 @@ function configureObjectExtensions(options, logger) {
   eh.extend(Object, "flatten", function (separator) {
     return flatten(this, separator);
   });
+  eh.extend(Object, "flatten", flatten, true);
   eh.extend(Object, "unflatten", function (separator) {
     return _unflatten(this, separator);
   });
+  eh.extend(Object, "unflatten", _unflatten, true);
   eh.extend(Object, "toArray", function (type) {
     return toArray(this, type);
   });
+  eh.extend(Object, "toArray", toArray, true);
   eh.extend(Object, "query", function (path) {
     return base.query(this, path);
   });
@@ -403,6 +408,10 @@ function configureObjectExtensions(options, logger) {
 Object.defineProperty(exports, "foreach", {
   enumerable: true,
   get: function () { return base.foreach; }
+});
+Object.defineProperty(exports, "isSubClassOf", {
+  enumerable: true,
+  get: function () { return base.isSubClassOf; }
 });
 Object.defineProperty(exports, "query", {
   enumerable: true,

@@ -35,7 +35,7 @@ const unflatten = function (obj, separator = ".") {
           index = key.indexOf(separator, index + 1);
         }
 
-        prevObj[key.substr(prevIndex)] = obj[key];
+        prevObj[key.substr(prevIndex)] = unflatten(obj[key], separator);
       }
     }
   } else {

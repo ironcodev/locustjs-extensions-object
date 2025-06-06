@@ -1,6 +1,6 @@
 import { configureObjectExtensions } from "../src";
 
-configureObjectExtensions('clean')
+configureObjectExtensions("clean");
 
 const tests = [
   [
@@ -109,6 +109,24 @@ const tests = [
       const result = x.clean("all");
 
       expect(Object.keys(result).join(",")).toBe(`a`);
+    },
+  ],
+  [
+    "Object.clean: 12",
+    function (expect) {
+      const x = {
+        a: 10,
+        b: { x: null },
+        c: [{ n: 0 }, { n: 10, m: '' }, null, {}],
+        d: { m: { p: '   ' } },
+      };
+      const result = x.clean("all");
+
+      expect(Object.keys(result).join(",")).toBe(`a,c`);
+      expect(result.c).toBeDefined();
+      expect(result.c).toBeArray();
+      expect(result.c.length).toBe(1);
+      expect(Object.keys(result.c[0]).join(",")).toBe("n");
     },
   ],
 ];

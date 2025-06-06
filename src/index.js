@@ -32,10 +32,12 @@ function configureObjectExtensions(options, logger) {
   eh.extend(Object, "toJson", function (...args) {
     return toJson(this, ...args);
   });
+  eh.extend(Array, "toJson", toJson, true);
 
   eh.extend(Object, "merge", function (...args) {
     return merge(this, ...args);
   });
+  eh.extend(Array, "merge", merge, true);
 
   eh.extend(Object, "foreach", function (callback) {
     return foreach(this, callback);
@@ -45,14 +47,17 @@ function configureObjectExtensions(options, logger) {
   eh.extend(Object, "flatten", function (separator) {
     return flatten(this, separator);
   });
+  eh.extend(Object, "flatten", flatten, true);
 
   eh.extend(Object, "unflatten", function (separator) {
     return unflatten(this, separator);
   });
+  eh.extend(Object, "unflatten", unflatten, true);
 
   eh.extend(Object, "toArray", function (type) {
     return toArray(this, type);
   });
+  eh.extend(Object, "toArray", toArray, true);
 
   eh.extend(Object, "query", function (path) {
     return query(this, path);
@@ -81,6 +86,7 @@ function configureObjectExtensions(options, logger) {
 
 export {
   configureObjectExtensions,
+  isSubClassOf,
   merge,
   flatten,
   unflatten,
